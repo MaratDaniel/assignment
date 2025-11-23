@@ -1,0 +1,64 @@
+CSCI 341 Assignment 3 - Submission Checklist
+==============================================
+
+REQUIRED FILES:
+✓ schema.sql - Database schema and data (Part 1)
+✓ database_queries.py - All Part 2 queries using SQLAlchemy
+✓ app.py - Flask web application (Part 3)
+✓ executive_summary.txt - Executive summary document
+✓ video_presentation_link.txt - Link to video presentation (to be filled)
+✓ requirements.txt - Python dependencies
+✓ README.md - Setup instructions
+
+OPTIONAL HELPER FILES:
+✓ export_database.sh - Script to export database
+✓ templates/ - All HTML templates for web application
+
+VERIFICATION:
+1. Database schema (schema.sql):
+   ✓ All tables created with primary keys and foreign keys
+   ✓ At least 10 instances per table
+   ✓ Data ensures all queries return non-empty results
+
+2. Part 2 Queries (database_queries.py):
+   ✓ CREATE statements
+   ✓ INSERT statements
+   ✓ UPDATE statements (3.1 and 3.2)
+   ✓ DELETE statements (4.1 and 4.2)
+   ✓ Simple queries (5.1-5.4)
+   ✓ Complex queries (6.1-6.4)
+   ✓ Derived attribute query (7)
+   ✓ View operation (8)
+
+3. Web Application (app.py):
+   ✓ CRUD operations for USER
+   ✓ CRUD operations for CAREGIVER
+   ✓ CRUD operations for MEMBER
+   ✓ CRUD operations for ADDRESS
+   ✓ CRUD operations for JOB
+   ✓ CRUD operations for JOB_APPLICATION
+   ✓ CRUD operations for APPOINTMENT
+   ✓ All templates created
+
+4. Documentation:
+   ✓ Executive summary completed
+   ✓ README with setup instructions
+   ✓ Video link placeholder created
+
+TO EXPORT DATABASE:
+Run: ./export_database.sh
+Or manually: pg_dump -U postgres -d caregivers_db > caregivers_db_export.sql
+
+TO CREATE SUBMISSION ZIP:
+zip -r assignment3_submission.zip \
+    schema.sql \
+    database_queries.py \
+    app.py \
+    executive_summary.txt \
+    video_presentation_link.txt \
+    requirements.txt \
+    README.md \
+    templates/
+
+NOTE: Do NOT include the video file itself, only the link.
+

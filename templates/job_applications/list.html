@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Job Applications</h2>
+<a href="{{ url_for('create_job_application') }}" class="btn btn-primary">Create New Job Application</a>
+
+<table>
+    <thead>
+        <tr>
+            <th>Job ID</th>
+            <th>Caregiving Type</th>
+            <th>Applicant Name</th>
+            <th>Member Name</th>
+            <th>Date Applied</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for application in applications %}
+        <tr>
+            <td>{{ application.job_id }}</td>
+            <td>{{ application.required_caregiving_type }}</td>
+            <td>{{ application.caregiver_name }} {{ application.caregiver_surname }}</td>
+            <td>{{ application.member_name }} {{ application.member_surname }}</td>
+            <td>{{ application.date_applied }}</td>
+            <td>
+                <form method="POST" action="{{ url_for('delete_job_application', caregiver_id=application.caregiver_user_id, job_id=application.job_id) }}" style="display: inline;">
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+

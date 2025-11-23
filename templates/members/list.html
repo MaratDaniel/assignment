@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Members</h2>
+<a href="{{ url_for('create_member') }}" class="btn btn-primary">Create New Member</a>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>City</th>
+            <th>Phone Number</th>
+            <th>House Rules</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for member in members %}
+        <tr>
+            <td>{{ member.member_user_id }}</td>
+            <td>{{ member.given_name }} {{ member.surname }}</td>
+            <td>{{ member.email }}</td>
+            <td>{{ member.city }}</td>
+            <td>{{ member.phone_number }}</td>
+            <td>{{ member.house_rules[:50] if member.house_rules else '' }}{% if member.house_rules and member.house_rules|length > 50 %}...{% endif %}</td>
+            <td>
+                <a href="{{ url_for('update_member', member_id=member.member_user_id) }}" class="btn btn-primary">Edit</a>
+                <form method="POST" action="{{ url_for('delete_member', member_id=member.member_user_id) }}" style="display: inline;">
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+

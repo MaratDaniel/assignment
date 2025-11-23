@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>{% if member %}Edit Member{% else %}Create New Member{% endif %}</h2>
+
+<form method="POST">
+    {% if not member %}
+    <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+    </div>
+    <div class="form-group">
+        <label for="given_name">Given Name:</label>
+        <input type="text" id="given_name" name="given_name" required>
+    </div>
+    <div class="form-group">
+        <label for="surname">Surname:</label>
+        <input type="text" id="surname" name="surname" required>
+    </div>
+    <div class="form-group">
+        <label for="city">City:</label>
+        <input type="text" id="city" name="city" required>
+    </div>
+    <div class="form-group">
+        <label for="phone_number">Phone Number:</label>
+        <input type="text" id="phone_number" name="phone_number" required>
+    </div>
+    <div class="form-group">
+        <label for="profile_description">Profile Description:</label>
+        <textarea id="profile_description" name="profile_description"></textarea>
+    </div>
+    <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+    </div>
+    {% endif %}
+    <div class="form-group">
+        <label for="house_rules">House Rules:</label>
+        <textarea id="house_rules" name="house_rules">{{ member.house_rules if member else '' }}</textarea>
+    </div>
+    <div class="form-group">
+        <label for="dependent_description">Dependent Description:</label>
+        <textarea id="dependent_description" name="dependent_description">{{ member.dependent_description if member else '' }}</textarea>
+    </div>
+    <div class="actions">
+        <button type="submit" class="btn btn-success">Save</button>
+        <a href="{{ url_for('list_members') }}" class="btn btn-primary">Cancel</a>
+    </div>
+</form>
+{% endblock %}
+

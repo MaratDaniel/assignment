@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>{% if job %}Edit Job{% else %}Create New Job{% endif %}</h2>
+
+<form method="POST">
+    <div class="form-group">
+        <label for="member_user_id">Member ID:</label>
+        <select id="member_user_id" name="member_user_id" required>
+            <option value="">Select a member</option>
+            {% for member in members %}
+            <option value="{{ member.member_user_id }}" {% if job and job.member_user_id == member.member_user_id %}selected{% endif %}>{{ member.member_user_id }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="required_caregiving_type">Required Caregiving Type:</label>
+        <select id="required_caregiving_type" name="required_caregiving_type" required>
+            <option value="babysitter" {% if job and job.required_caregiving_type == 'babysitter' %}selected{% endif %}>Babysitter</option>
+            <option value="elderly care" {% if job and job.required_caregiving_type == 'elderly care' %}selected{% endif %}>Elderly Care</option>
+            <option value="playmate for children" {% if job and job.required_caregiving_type == 'playmate for children' %}selected{% endif %}>Playmate for Children</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="other_requirements">Other Requirements:</label>
+        <textarea id="other_requirements" name="other_requirements">{{ job.other_requirements if job else '' }}</textarea>
+    </div>
+    <div class="form-group">
+        <label for="date_posted">Date Posted:</label>
+        <input type="date" id="date_posted" name="date_posted" value="{{ job.date_posted if job else '' }}" required>
+    </div>
+    <div class="actions">
+        <button type="submit" class="btn btn-success">Save</button>
+        <a href="{{ url_for('list_jobs') }}" class="btn btn-primary">Cancel</a>
+    </div>
+</form>
+{% endblock %}
+

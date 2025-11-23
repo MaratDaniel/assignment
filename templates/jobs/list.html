@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Jobs</h2>
+<a href="{{ url_for('create_job') }}" class="btn btn-primary">Create New Job</a>
+
+<table>
+    <thead>
+        <tr>
+            <th>Job ID</th>
+            <th>Member Name</th>
+            <th>Required Caregiving Type</th>
+            <th>Other Requirements</th>
+            <th>Date Posted</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for job in jobs %}
+        <tr>
+            <td>{{ job.job_id }}</td>
+            <td>{{ job.given_name }} {{ job.surname }}</td>
+            <td>{{ job.required_caregiving_type }}</td>
+            <td>{{ job.other_requirements[:50] if job.other_requirements else '' }}{% if job.other_requirements and job.other_requirements|length > 50 %}...{% endif %}</td>
+            <td>{{ job.date_posted }}</td>
+            <td>
+                <a href="{{ url_for('update_job', job_id=job.job_id) }}" class="btn btn-primary">Edit</a>
+                <form method="POST" action="{{ url_for('delete_job', job_id=job.job_id) }}" style="display: inline;">
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+

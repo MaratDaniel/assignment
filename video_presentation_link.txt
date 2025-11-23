@@ -1,0 +1,13 @@
+Video Presentation Link:
+[Please upload your video presentation to Google Drive and paste the shareable link here]
+
+Instructions:
+1. Record a video demonstrating:
+   - Part 1: Database schema creation and data insertion
+   - Part 2: Execution of all queries with results
+   - Part 3: Web application CRUD operations
+2. Keep the video concise (ideally under 10 minutes)
+3. Upload to Google Drive
+4. Set sharing permissions to "Anyone with the link can view"
+5. Paste the shareable link above
+
