@@ -631,6 +631,48 @@ def create_job_application():
     finally:
         session.close()
 
+@app.route('/job_applications/<int:caregiver_id>/<int:job_id>/edit', methods=['GET', 'POST'])
+def update_job_application(caregiver_id, job_id):
+    """Update a job application"""
+    session = get_session()
+    try:
+        if request.method == 'POST':
+            query = text("""
+                UPDATE job_application
+                SET date_applied = :date_applied
+                WHERE caregiver_user_id = :caregiver_id AND job_id = :job_id
+            """)
+            session.execute(query, {
+                'caregiver_id': caregiver_id,
+                'job_id': job_id,
+                'date_applied': request.form['date_applied']
+            })
+            session.commit()
+            flash('Job application updated successfully!', 'success')
+            return redirect(url_for('list_job_applications'))
+        else:
+            result = session.execute(text("""
+                SELECT * FROM job_application
+                WHERE caregiver_user_id = :caregiver_id AND job_id = :job_id
+            """), {'caregiver_id': caregiver_id, 'job_id': job_id})
+            application = result.fetchone()
+            if application:
+                application = dict(application._mapping)
+                caregivers = session.execute(text("SELECT caregiver_user_id FROM caregiver ORDER BY caregiver_user_id"))
+                jobs = session.execute(text("SELECT job_id FROM job ORDER BY job_id"))
+                return render_template('job_applications/form.html', application=application,
+                                     caregivers=[dict(row._mapping) for row in caregivers],
+                                     jobs=[dict(row._mapping) for row in jobs])
+            else:
+                flash('Job application not found!', 'error')
+                return redirect(url_for('list_job_applications'))
+    except Exception as e:
+        session.rollback()
+        flash(f'Error updating job application: {str(e)}', 'error')
+    finally:
+        session.close()
+    return redirect(url_for('list_job_applications'))
+
 @app.route('/job_applications/<int:caregiver_id>/<int:job_id>/delete', methods=['POST'])
 def delete_job_application(caregiver_id, job_id):
     """Delete a job application"""

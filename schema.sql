@@ -103,7 +103,8 @@ INSERT INTO "user" (email, given_name, surname, city, phone_number, profile_desc
 ('dmitry.ivanov@email.com', 'Dmitry', 'Ivanov', 'Astana', '+77012345694', 'Working parent seeking after-school care', 'pass139'),
 ('ayzhan.kazakhova@email.com', 'Ayzhan', 'Kazakhova', 'Aktobe', '+77012345695', 'Looking for elderly care with medical knowledge', 'pass140'),
 ('sergey.volkov@email.com', 'Sergey', 'Volkov', 'Astana', '+77012345696', 'Father seeking reliable babysitter', 'pass141'),
-('madina.abdullayeva@email.com', 'Madina', 'Abdullayeva', 'Almaty', '+77012345697', 'Need caregiver for my elderly mother', 'pass142');
+('madina.abdullayeva@email.com', 'Madina', 'Abdullayeva', 'Almaty', '+77012345697', 'Need caregiver for my elderly mother', 'pass142'),
+('nazira.suleimenova@email.com', 'Nazira', 'Suleimenova', 'Astana', '+77012345698', 'Seeking gentle care for elderly family member', 'pass143');
 
 -- Insert data into CAREGIVER table (at least 10 instances)
 INSERT INTO caregiver (caregiver_user_id, photo, gender, caregiving_type, hourly_rate) VALUES
