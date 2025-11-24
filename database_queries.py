@@ -1,26 +1,19 @@
-"""
-CSCI 341 Assignment 3 - Part 2
-Database Queries using SQLAlchemy
-Online Caregivers Platform
-"""
-
 from sqlalchemy import create_engine, text, MetaData, Table, Column, Integer, String, Date, Time, DECIMAL, Text, CheckConstraint, ForeignKey
 from sqlalchemy.orm import sessionmaker, declarative_base, relationship
 from datetime import date, time
 import os
 
-# Database connection configuration
-# Change these according to your database setup
+# db hookup change this if its diff
 DATABASE_URL = os.getenv('DATABASE_URL', 'postgresql://postgres:postgres@localhost:5432/caregivers_db')
 
-# Create engine
+# spin up engine + session right away so i dont forget later
 engine = create_engine(DATABASE_URL, echo=False)
 Session = sessionmaker(bind=engine)
 session = Session()
 
 Base = declarative_base()
 
-# Define database models
+# models go here
 class User(Base):
     __tablename__ = 'user'
     user_id = Column(Integer, primary_key=True)
@@ -78,22 +71,22 @@ class Appointment(Base):
     status = Column(String(20), nullable=False)
 
 def print_separator(title):
-    """Print a separator with title"""
+    """prints a chunky divider"""
     print("\n" + "="*80)
     print(f"  {title}")
     print("="*80 + "\n")
 
 def execute_query(query, description):
-    """Execute and print query results"""
+    """just runs whatever text block and dumps rows"""
     print(f"\n{description}")
     print("-" * 80)
     try:
         result = session.execute(text(query))
         rows = result.fetchall()
         if rows:
-            # Get column names
+            # grab col names so table print looks nice
             columns = result.keys()
-            # Print header
+            # print header bar
             print(" | ".join(str(col) for col in columns))
             print("-" * 80)
             # Print rows
@@ -108,26 +101,20 @@ def execute_query(query, description):
 def main():
     print_separator("CSCI 341 Assignment 3 - Part 2: Database Queries")
     
-    # ============================================================================
-    # 1. CREATE SQL STATEMENTS
-    # ============================================================================
+    # section 1 create stuff
     print_separator("1. CREATE SQL STATEMENTS")
     print("Note: Tables should already be created using schema.sql")
     print("If tables don't exist, run schema.sql first.")
     
-    # ============================================================================
-    # 2. INSERT SQL STATEMENTS
-    # ============================================================================
+    # section 2 inserts (again schema.sql shouldve done it)
     print_separator("2. INSERT SQL STATEMENTS")
     print("Note: Data should already be inserted using schema.sql")
     print("If data is missing, run schema.sql first.")
     
-    # ============================================================================
-    # 3. UPDATE SQL STATEMENTS
-    # ============================================================================
+    # section 3 updates sql
     print_separator("3. UPDATE SQL STATEMENTS")
     
-    # 3.1 Update phone number of Arman Armanov
+    # phone upd for arman armanov
     print("3.1 Updating phone number of Arman Armanov to +77773414141...")
     update_query_1 = """
     UPDATE "user"
@@ -138,7 +125,7 @@ def main():
     session.commit()
     print("✓ Phone number updated successfully")
     
-    # Verify the update
+    # double check upd
     verify_query = """
     SELECT given_name, surname, phone_number
     FROM "user"
@@ -159,7 +146,6 @@ def main():
     session.commit()
     print("✓ Commission fee added successfully")
     
-    # Verify the update
     verify_query_2 = """
     SELECT caregiver_user_id, hourly_rate
     FROM caregiver
@@ -167,12 +153,10 @@ def main():
     """
     execute_query(verify_query_2, "Verification - Updated hourly rates:")
     
-    # ============================================================================
-    # 4. DELETE SQL STATEMENTS
-    # ============================================================================
+    # section 4 delete sqls
     print_separator("4. DELETE SQL STATEMENTS")
     
-    # 4.1 Delete jobs posted by Amina Aminova
+    # amina posted too many jobs
     print("4.1 Deleting jobs posted by Amina Aminova...")
     delete_query_1 = """
     DELETE FROM job
@@ -190,7 +174,6 @@ def main():
     session.commit()
     print("✓ Jobs deleted successfully")
     
-    # Verify the deletion
     verify_query_3 = """
     SELECT j.job_id, u.given_name, u.surname
     FROM job j
@@ -200,7 +183,7 @@ def main():
     """
     execute_query(verify_query_3, "Verification - Remaining jobs by Amina Aminova (should be empty):")
     
-    # 4.2 Delete all members who live on Kabanbay Batyr street
+    # delete  members on kaba street
     print("4.2 Deleting all members who live on Kabanbay Batyr street...")
     delete_query_2 = """
     DELETE FROM member
@@ -214,7 +197,7 @@ def main():
     session.commit()
     print("✓ Members deleted successfully")
     
-    # Verify the deletion
+    # confirm street list empty
     verify_query_4 = """
     SELECT m.member_user_id, u.given_name, u.surname, a.street
     FROM member m
@@ -224,12 +207,10 @@ def main():
     """
     execute_query(verify_query_4, "Verification - Remaining members on Kabanbay Batyr (should be empty):")
     
-    # ============================================================================
-    # 5. SIMPLE QUERIES
-    # ============================================================================
+    # section 5
     print_separator("5. SIMPLE QUERIES")
     
-    # 5.1 Select caregiver and member names for the accepted appointments
+    #show who accepted who
     query_5_1 = """
     SELECT 
         cg.given_name AS caregiver_given_name,
@@ -245,7 +226,7 @@ def main():
     """
     execute_query(query_5_1, "5.1 Caregiver and member names for accepted appointments:")
     
-    # 5.2 List job ids that contain 'soft-spoken' in their other requirements
+    #find soft spoken 
     query_5_2 = """
     SELECT job_id, other_requirements
     FROM job
@@ -253,7 +234,7 @@ def main():
     """
     execute_query(query_5_2, "5.2 Job IDs containing 'soft-spoken' in requirements:")
     
-    # 5.3 List the work hours of all babysitter positions
+    # babysitter hours
     query_5_3 = """
     SELECT 
         a.appointment_id,
@@ -265,7 +246,7 @@ def main():
     """
     execute_query(query_5_3, "5.3 Work hours of all babysitter positions:")
     
-    # 5.4 List the members who are looking for Elderly Care in Astana and have "No pets." rule
+    #elderly care with no pets rule
     query_5_4 = """
     SELECT DISTINCT
         u.user_id,
@@ -282,12 +263,10 @@ def main():
     """
     execute_query(query_5_4, "5.4 Members looking for Elderly Care in Astana with 'No pets' rule:")
     
-    # ============================================================================
-    # 6. COMPLEX QUERIES
-    # ============================================================================
+    # section 6
     print_separator("6. COMPLEX QUERIES")
     
-    # 6.1 Count the number of applicants for each job posted by a member
+    # headcount per job
     query_6_1 = """
     SELECT 
         j.job_id,
@@ -302,7 +281,7 @@ def main():
     """
     execute_query(query_6_1, "6.1 Number of applicants for each job:")
     
-    # 6.2 Total hours spent by caregivers for all accepted appointments
+    #total confirmd hours
     query_6_2 = """
     SELECT 
         SUM(a.work_hours) AS total_hours
@@ -311,7 +290,7 @@ def main():
     """
     execute_query(query_6_2, "6.2 Total hours spent by caregivers for all accepted appointments:")
     
-    # 6.3 Average pay of caregivers based on accepted appointments
+    #avg payout for confirmd caregivers
     query_6_3 = """
     SELECT 
         AVG(c.hourly_rate * a.work_hours) AS average_pay
@@ -321,7 +300,6 @@ def main():
     """
     execute_query(query_6_3, "6.3 Average pay of caregivers based on accepted appointments:")
     
-    # 6.4 Caregivers who earn above average based on accepted appointments
     query_6_4 = """
     SELECT 
         u.given_name,
@@ -344,12 +322,10 @@ def main():
     """
     execute_query(query_6_4, "6.4 Caregivers who earn above average based on accepted appointments:")
     
-    # ============================================================================
-    # 7. QUERY WITH A DERIVED ATTRIBUTE
-    # ============================================================================
+    # section 7
     print_separator("7. QUERY WITH A DERIVED ATTRIBUTE")
     
-    # Calculate the total cost to pay for a caregiver for all accepted appointments
+    # calc total cost per caregiver per confirmd appt
     query_7 = """
     SELECT 
         a.appointment_id,
@@ -365,12 +341,10 @@ def main():
     """
     execute_query(query_7, "7. Total cost to pay for caregivers for all accepted appointments:")
     
-    # ============================================================================
-    # 8. VIEW OPERATION
-    # ============================================================================
+    # section 8
     print_separator("8. VIEW OPERATION")
     
-    # Create view for job applications and applicants
+    # build a view
     print("Creating view: job_applications_view")
     create_view_query = """
     CREATE OR REPLACE VIEW job_applications_view AS
